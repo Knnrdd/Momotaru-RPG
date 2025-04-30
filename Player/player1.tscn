@@ -1,10 +1,64 @@
-[gd_scene load_steps=11 format=3 uid="uid://b8uo6lwql84nn"]
+[gd_scene load_steps=14 format=3 uid="uid://b8uo6lwql84nn"]
 
 [ext_resource type="Texture2D" uid="uid://jnkja5y4ub3k" path="res://Player/MCSprites/MC Sprite.png" id="1_f8d2x"]
 [ext_resource type="Script" uid="uid://oufnr88rr015" path="res://Player/Scripts/Player.gd" id="1_wiguo"]
+[ext_resource type="Script" uid="uid://bguba2v8vqmfy" path="res://Player/Scripts/player_state_machine.gd" id="3_anfv3"]
+[ext_resource type="Script" uid="uid://dh0mqtpbnhsqq" path="res://Player/Scripts/State_Idle.gd" id="4_ine82"]
+[ext_resource type="Script" uid="uid://b7hangflfamfs" path="res://Player/Scripts/State_Walk.gd" id="5_ojjv1"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_214cm"]
 radius = 12.0
+
+[sub_resource type="Animation" id="Animation_wiguo"]
+resource_name = "Idle_down"
+length = 0.4
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+
+[sub_resource type="Animation" id="Animation_ine82"]
+resource_name = "Idle_side"
+length = 0.4
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [14, 15, 16]
+}
+
+[sub_resource type="Animation" id="Animation_anfv3"]
+resource_name = "Idle_up"
+length = 0.4
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [7, 8, 9]
+}
 
 [sub_resource type="Animation" id="Animation_ojjv1"]
 resource_name = "walk_down"
@@ -57,57 +111,6 @@ tracks/0/keys = {
 "values": [10, 11, 12, 13]
 }
 
-[sub_resource type="Animation" id="Animation_wiguo"]
-resource_name = "Idle_down"
-length = 0.4
-loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [0, 1, 2]
-}
-
-[sub_resource type="Animation" id="Animation_anfv3"]
-resource_name = "Idle_up"
-length = 0.4
-loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [7, 8, 9]
-}
-
-[sub_resource type="Animation" id="Animation_ine82"]
-resource_name = "Idle_side"
-length = 0.4
-loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [14, 15, 16]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_46aue"]
 _data = {
 &"idle_down": SubResource("Animation_wiguo"),
@@ -119,6 +122,8 @@ _data = {
 }
 
 [node name="Player" type="CharacterBody2D"]
+motion_mode = 1
+wall_min_slide_angle = 0.174533
 script = ExtResource("1_wiguo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -133,3 +138,15 @@ hframes = 21
 libraries = {
 &"": SubResource("AnimationLibrary_46aue")
 }
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("3_anfv3")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("4_ine82")
+
+[node name="Walk" type="Node" parent="StateMachine"]
+script = ExtResource("5_ojjv1")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1, 0)

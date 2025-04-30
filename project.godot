@@ -19,9 +19,14 @@ config/icon="res://icon.svg"
 
 window/size/viewport_width=480
 window/size/viewport_height=270
+window/size/sharp_corners=true
 window/size/window_width_override=1920
 window/size/window_height_override=1080
 window/stretch/mode="viewport"
+window/vsync/vsync_mode=0
+window/canvas_textures/default_texture_filter=0
+window/mode=0
+window/quality/msaa_2d=0
 
 [input]
 
@@ -46,6 +51,12 @@ Right={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="Player"
+2d_physics/layer_5="Stone"
+
 [rendering]
 
-textures/canvas_textures/default_texture_filter=0
+anti_aliasing/quality/msaa_2d=1
+scaling_3d/mode=1
